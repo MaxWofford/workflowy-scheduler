@@ -16,7 +16,7 @@ workflowy = new Workflowy username, password, new FileCookieStore('cookies.jar')
 # update all the tasks with today's day of week to instead have a #today tag
 ###
 replaceDayOfWeekTag = ->
-  dayOfWeekTag = ///\##{moment().format('dddd').toLowerCase()}\b///g
+  dayOfWeekTag = ///\##{moment().format('dddd').toLowerCase()}\b///
 
   workflowy
   .find dayOfWeekTag
