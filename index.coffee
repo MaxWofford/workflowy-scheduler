@@ -64,6 +64,19 @@ resetWeekly = ->
   .fail (err) ->
     console.error err
 
+###
+# anything marked #week that's complete, delete
+###
+deleteWeekCompleted = ->
+  weekTag = /#week\b/
+
+  workflowy
+  .find weekTag, true
+  .then (nodes) ->
+    workflowy.delete nodes, true
+  .fail (err) ->
+    console.error err
+
 schedule.scheduleJob
   dayOfWeek: 0
   hour: 4
@@ -71,6 +84,7 @@ schedule.scheduleJob
   ->
     workflowy.refresh()
     resetWeekly()
+    deleteWeekCompleted()
 
 schedule.scheduleJob
   hour: 4
