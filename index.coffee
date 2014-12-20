@@ -2,6 +2,7 @@ Workflowy = require 'workflowy'
 schedule = require 'node-schedule'
 moment = require 'moment'
 FileCookieStore = require 'tough-cookie-filestore'
+_ = require 'lodash'
 
 username = process.env.WORKFLOWY_USERNAME
 password = process.env.WORKFLOWY_PASSWORD
@@ -11,6 +12,18 @@ unless username and password
   process.exit 1
 
 workflowy = new Workflowy username, password, new FileCookieStore('cookies.jar')
+
+getNestedNodes = (nodes) ->
+  result = []
+
+  addChildren = (arr) ->
+    result.push arr...
+    addChildren children for child in arr when children = child.ch
+    return
+
+  addChildren if _.isArray nodes then nodes else [nodes]
+  result
+
 
 ###
 # update all the tasks with today's day of week to instead have a #today tag
@@ -46,9 +59,9 @@ deleteTodayCompleted = ->
 resetDaily = ->
   dailyTag = /#daily\b/
   workflowy
-  .find dailyTag, true
+  .find dailyTag
   .then (nodes) ->
-    workflowy.complete nodes, false
+    workflowy.complete getNestedNodes(nodes), false
   .fail (err) ->
     console.error err
 
@@ -58,9 +71,9 @@ resetDaily = ->
 resetWeekly = ->
   weeklyTag = /#weekly\b/
   workflowy
-  .find weeklyTag, true
+  .find weeklyTag
   .then (nodes) ->
-    workflowy.complete nodes, false
+    workflowy.complete getNestedNodes(nodes), false
   .fail (err) ->
     console.error err
 
