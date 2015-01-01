@@ -29,7 +29,7 @@ getNestedNodes = (nodes) ->
 # update all the tasks with today's day of week to instead have a #today tag
 ###
 replaceDayOfWeekTag = ->
-  dayOfWeekTag = ///\##{moment().format('dddd').toLowerCase()}\b///
+  dayOfWeekTag = ///\##{moment().format('dddd').toLowerCase()}\b///i
 
   workflowy
   .find dayOfWeekTag
@@ -44,7 +44,7 @@ replaceDayOfWeekTag = ->
 # anything marked #today that is complete, delete
 ###
 deleteTodayCompleted = ->
-  todayTag = /#today\b/
+  todayTag = /#today\b/i
 
   workflowy
   .find todayTag, true
@@ -57,7 +57,7 @@ deleteTodayCompleted = ->
 # anything marked daily that's complete, mark as not complete
 ###
 resetDaily = ->
-  dailyTag = /#daily\b/
+  dailyTag = /#daily\b/i
   workflowy
   .find dailyTag
   .then (nodes) ->
@@ -69,7 +69,7 @@ resetDaily = ->
 # anything that's complete and marked #weekly, mark as not complete
 ###
 resetWeekly = ->
-  weeklyTag = /#weekly\b/
+  weeklyTag = /#weekly\b/i
   workflowy
   .find weeklyTag
   .then (nodes) ->
@@ -81,7 +81,7 @@ resetWeekly = ->
 # anything marked #week that's complete, delete
 ###
 deleteWeekCompleted = ->
-  weekTag = /#week\b/
+  weekTag = /#week\b/i
 
   workflowy
   .find weekTag, true
